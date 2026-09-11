@@ -3,120 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dad's Spicy Chicken — Authentic West African cuisine. Family owned. Bold flavors. Welcoming to all.">
+  <meta name="description" content="African Cuisine (aka Dad's Spicy Chicken) — authentic West African food, family owned. Bold flavors, fresh daily. Order for pickup. Coming to Pike Place soon.">
   <meta name="theme-color" content="#1a0800">
-  <title>Dad's Spicy Chicken</title>
+  <meta property="og:title" content="African Cuisine — aka Dad's Spicy Chicken">
+  <meta property="og:description" content="Authentic West African cuisine, family owned. Bold flavors cooked fresh. Order today.">
+  <meta property="og:type" content="restaurant">
+  <title>African Cuisine — aka Dad's Spicy Chicken</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Oswald:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --fire:   #e85d04;
       --ember:  #dc2f02;
       --gold:   #f48c06;
       --dark:   #03071e;
+      --panel:  #07090f;
       --brown:  #6a1a01;
       --cream:  #fff8f0;
       --white:  #ffffff;
-      --muted:  #999;
+      --muted:  rgba(255,255,255,0.65);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Lato', sans-serif; background: var(--dark); color: var(--white); -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Lato', sans-serif; background: var(--dark); color: var(--white); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Scroll-reveal animation ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ── Image slot with graceful placeholder fallback ──
+       If the real photo is missing/broken, the gradient + emoji show
+       so the layout never looks empty. */
+    .imgslot { position: relative; overflow: hidden; background: linear-gradient(135deg, #370617, #6a040f); }
+    .imgslot img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+    .imgslot::after {
+      content: attr(data-emoji);
+      position: absolute; inset: 0; z-index: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; opacity: 0.55;
+    }
+    .imgslot img[src=""], .imgslot img:not([src]) { display: none; }
 
     /* NAV */
     nav {
       position: fixed; top: 0; width: 100%; z-index: 100;
-      background: rgba(3,7,30,0.92); backdrop-filter: blur(12px);
+      background: rgba(3,7,30,0.9); backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(232,93,4,0.2);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2rem; height: 64px;
+      padding: 0 2rem; height: 66px;
     }
-    .nav-brand { font-family: 'Oswald', sans-serif; font-size: 1.3rem; letter-spacing: 0.06em; color: var(--gold); }
+    .nav-brand { font-family: 'Great Vibes', cursive; font-size: 1.75rem; color: var(--gold); line-height: 1; }
+    .nav-brand small { font-family: 'Oswald', sans-serif; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); display: block; margin-top: -2px; }
     .nav-links { display: flex; gap: 2rem; }
-    .nav-links a { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.75); transition: color 0.15s; }
+    .nav-links a { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.75); transition: color 0.15s; }
     .nav-links a:hover { color: var(--gold); }
-    .nav-order { background: var(--fire); color: var(--white); padding: 0.55rem 1.25rem; border-radius: 4px; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; transition: background 0.15s; }
-    .nav-order:hover { background: var(--ember); }
-    @media(max-width:640px){ .nav-links{ display:none; } }
+    .nav-order { background: var(--fire); color: var(--white); padding: 0.55rem 1.25rem; border-radius: 6px; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; transition: background 0.15s, transform 0.15s; }
+    .nav-order:hover { background: var(--ember); transform: translateY(-1px); }
+    @media(max-width:720px){ .nav-links{ display:none; } nav { padding: 0 1.1rem; } }
 
-    /* HERO */
+    /* HERO with rotating background slideshow */
     .hero {
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden; padding: 5rem 2rem 4rem;
-      background: linear-gradient(135deg, #03071e 0%, #370617 40%, #6a040f 70%, #9d0208 100%);
+      position: relative; overflow: hidden; padding: 6rem 2rem 4rem;
       text-align: center;
     }
-    .hero__bg {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,93,4,0.18) 0%, transparent 70%);
+    .hero__slides { position: absolute; inset: 0; z-index: 0; }
+    .hero__slide {
+      position: absolute; inset: 0; opacity: 0;
+      background-size: cover; background-position: center;
+      transition: opacity 1.4s ease, transform 8s ease;
+      transform: scale(1.05);
     }
-    .hero__content { position: relative; z-index: 1; max-width: 800px; }
+    .hero__slide.is-active { opacity: 1; transform: scale(1.12); }
+    .hero__scrim {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(135deg, rgba(3,7,30,0.82) 0%, rgba(55,6,23,0.78) 45%, rgba(106,4,15,0.8) 100%);
+    }
+    .hero__glow { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 80% 60% at 50% 38%, rgba(232,93,4,0.22) 0%, transparent 70%); }
+    .hero__content { position: relative; z-index: 2; max-width: 820px; }
     .hero__tag {
       display: inline-block; border: 1px solid var(--gold); color: var(--gold);
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
-      padding: 0.35rem 1rem; border-radius: 2px; margin-bottom: 1.5rem;
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase;
+      padding: 0.4rem 1.1rem; border-radius: 2px; margin-bottom: 1.5rem;
     }
-    .hero h1 {
+    .hero__title { line-height: 0.95; margin-bottom: 0.5rem; }
+    .hero__title-script {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3.4rem, 11vw, 7rem);
+      color: var(--white);
+      display: block;
+      text-shadow: 0 4px 30px rgba(232,93,4,0.4);
+    }
+    .hero__title-aka {
       font-family: 'Oswald', sans-serif; font-weight: 700;
-      font-size: clamp(3.5rem, 10vw, 7rem);
-      line-height: 1; letter-spacing: 0.02em; text-transform: uppercase;
-      color: var(--white); margin-bottom: 0.25rem;
+      font-size: clamp(1.3rem, 4vw, 2.2rem); text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--fire); display: block; margin-top: 0.35rem;
     }
-    .hero h1 span { color: var(--fire); display: block; }
     .hero__sub {
-      font-size: clamp(1rem, 2vw, 1.25rem); color: rgba(255,255,255,0.65);
+      font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--muted);
       font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase;
-      margin: 1rem 0 0.5rem;
+      margin: 1.1rem 0 0.5rem;
     }
-    .hero__desc {
-      font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.75;
-      max-width: 520px; margin: 1.25rem auto 2.5rem;
-    }
-    .hero__cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+    .hero__desc { font-size: 1.05rem; color: rgba(255,255,255,0.82); line-height: 1.75; max-width: 540px; margin: 1.25rem auto 2.25rem; }
+    .hero__cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* BUTTONS */
     .btn-primary {
       background: var(--fire); color: var(--white);
       font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 1rem 2.5rem; border: none; cursor: pointer; border-radius: 3px;
-      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 1rem 2.4rem; border: none; cursor: pointer; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 6px 20px rgba(232,93,4,0.35);
+      display: inline-flex; align-items: center; gap: 0.5rem;
     }
-    .btn-primary:hover { background: var(--ember); transform: translateY(-2px); }
+    .btn-primary:hover { background: var(--ember); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(232,93,4,0.45); }
     .btn-outline {
       background: transparent; color: var(--white);
       border: 2px solid rgba(255,255,255,0.35);
       font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 1rem 2.5rem; cursor: pointer; border-radius: 3px;
-      transition: border-color 0.2s, transform 0.15s;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 1rem 2.4rem; cursor: pointer; border-radius: 6px;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
     }
     .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
-    .hero__license {
-      font-size: 0.78rem; color: rgba(255,255,255,0.4);
-      letter-spacing: 0.08em; text-transform: uppercase;
-    }
-
-    /* STATS BAR */
-    .stats-bar {
-      background: var(--fire); display: flex; justify-content: center;
-      gap: 0; flex-wrap: wrap;
-    }
-    .stat-item {
-      flex: 1; min-width: 180px; padding: 1.25rem 2rem;
-      border-right: 1px solid rgba(255,255,255,0.2); text-align: center;
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-item__num {
-      font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700;
-      color: var(--white); display: block;
-    }
-    .stat-item__label { font-size: 0.75rem; color: rgba(255,255,255,0.75); letter-spacing: 0.1em; text-transform: uppercase; }
 
     /* SECTIONS */
     section { padding: 5rem 2rem; }
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 1140px; margin: 0 auto; }
     .eyebrow {
       font-family: 'Oswald', sans-serif; font-size: 0.72rem; font-weight: 600;
       letter-spacing: 0.3em; text-transform: uppercase; color: var(--fire);
@@ -124,53 +147,132 @@
     }
     h2 {
       font-family: 'Oswald', sans-serif; font-weight: 700;
-      font-size: clamp(2rem, 5vw, 3.2rem); text-transform: uppercase;
-      letter-spacing: 0.04em; line-height: 1.1; margin-bottom: 1rem;
+      font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase;
+      letter-spacing: 0.03em; line-height: 1.1; margin-bottom: 1rem;
     }
-    .lead { font-size: 1rem; color: rgba(255,255,255,0.65); line-height: 1.75; max-width: 560px; }
+    .lead { font-size: 1.02rem; color: var(--muted); line-height: 1.75; max-width: 580px; }
 
-    /* ABOUT */
-    .about-section { background: #07090f; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
-    @media(max-width:600px){ .about-grid{ grid-template-columns:1fr; } }
-    .about-card {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-      border-top: 3px solid var(--fire); padding: 2rem 1.75rem;
-      transition: border-top-color 0.2s;
-    }
-    .about-card:hover { border-top-color: var(--gold); }
-    .about-card__icon { font-size: 2rem; margin-bottom: 1rem; }
-    .about-card h3 { font-family:'Oswald',sans-serif; font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.6rem; color:var(--gold); }
-    .about-card p { font-size:0.93rem; line-height:1.7; color:rgba(255,255,255,0.65); }
-
-    /* MENU */
+    /* ── MENU (first section) — Uber-Eats-style graphic cards ── */
     .menu-section { background: var(--dark); }
-    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0; margin-top: 3rem; border: 1px solid rgba(255,255,255,0.08); }
-    .menu-card {
-      padding: 2rem; border-right: 1px solid rgba(255,255,255,0.08);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      transition: background 0.2s;
+    .menu-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .menu-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.75rem 0 2.25rem; }
+    .menu-filter {
+      font-family: 'Oswald', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
+      padding: 0.5rem 1.1rem; cursor: pointer; transition: all 0.18s;
     }
-    .menu-card:hover { background: rgba(232,93,4,0.06); }
-    .menu-card__emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
-    .menu-card__name { font-family:'Oswald',sans-serif; font-size:1.3rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:0.5rem; }
-    .menu-card__badge { display:inline-block; background:var(--fire); color:#fff; font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:0.15rem 0.55rem; border-radius:2px; margin-left:0.5rem; vertical-align:middle; }
-    .menu-card p { font-size:0.9rem; line-height:1.65; color:rgba(255,255,255,0.6); margin-top:0.5rem; }
+    .menu-filter:hover { border-color: var(--fire); color: var(--white); }
+    .menu-filter.is-active { background: var(--fire); border-color: var(--fire); color: #fff; }
 
-    /* CTA SECTION */
-    .cta-section {
-      background: linear-gradient(135deg, #370617, #6a040f);
-      text-align: center;
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .dish {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .cta-section h2 { color: var(--white); margin-bottom: 1rem; }
-    .cta-section p { font-size:1rem; color:rgba(255,255,255,0.72); line-height:1.75; max-width:500px; margin:0 auto 2rem; }
+    .dish:hover { transform: translateY(-6px); border-color: rgba(232,93,4,0.5); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .dish__media { aspect-ratio: 4/3; }
+    .dish__body { padding: 1.25rem 1.35rem 1.4rem; display: flex; flex-direction: column; flex: 1; }
+    .dish__row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+    .dish__name { font-family: 'Oswald', sans-serif; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
+    .dish__price { font-family: 'Oswald', sans-serif; font-size: 1.05rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
+    .dish__desc { font-size: 0.9rem; line-height: 1.6; color: var(--muted); margin: 0.5rem 0 0.9rem; flex: 1; }
+    .dish__tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+    .tag {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.22rem 0.6rem; border-radius: 999px; border: 1px solid transparent;
+    }
+    .tag--signature { background: var(--fire); color: #fff; }
+    .tag--fav { background: rgba(244,140,6,0.16); color: var(--gold); border-color: rgba(244,140,6,0.4); }
+    .tag--veg { background: rgba(76,175,80,0.16); color: #8bd48f; border-color: rgba(76,175,80,0.4); }
+    .tag--spicy { background: rgba(220,47,2,0.16); color: #ff8f6b; border-color: rgba(220,47,2,0.4); }
+    .tag--diet { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.18); }
+    .dish__add {
+      margin-top: auto; align-self: flex-start;
+      font-family: 'Oswald', sans-serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(232,93,4,0.14); color: var(--gold); border: 1px solid rgba(232,93,4,0.45);
+      border-radius: 8px; padding: 0.55rem 1.1rem; cursor: pointer; transition: all 0.18s;
+    }
+    .dish__add:hover { background: var(--fire); color: #fff; border-color: var(--fire); }
+    .dish__add.is-added { background: #2e7d32; border-color: #2e7d32; color: #fff; }
+
+    /* Dietary note under the menu */
+    .dietary-note {
+      margin-top: 2.25rem; padding: 1.25rem 1.5rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+      border-left: 3px solid var(--gold); border-radius: 0 10px 10px 0;
+      font-size: 0.92rem; line-height: 1.7; color: rgba(255,255,255,0.75);
+    }
+    .dietary-note strong { color: var(--gold); }
+
+    /* ── ORDER / checkout with promo code ── */
+    .order-section { background: linear-gradient(135deg, #370617, #6a040f); text-align: center; }
+    .order-card {
+      max-width: 560px; margin: 2rem auto 0; background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.14); border-radius: 16px; padding: 2rem 1.85rem;
+      backdrop-filter: blur(8px);
+    }
+    .order-cart {
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: 'Oswald', sans-serif; letter-spacing: 0.05em; text-transform: uppercase;
+      font-size: 0.9rem; color: rgba(255,255,255,0.85);
+      padding: 0.75rem 0; border-bottom: 1px dashed rgba(255,255,255,0.2);
+    }
+    .order-cart span:last-child { color: var(--gold); }
+    .promo-row { display: flex; gap: 0.6rem; margin: 1.25rem 0 0.5rem; flex-wrap: wrap; }
+    .promo-row input {
+      flex: 1; min-width: 160px; padding: 0.8rem 1rem; border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Lato', sans-serif; font-size: 0.95rem; letter-spacing: 0.04em;
+    }
+    .promo-row input::placeholder { color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem; }
+    .promo-row input:focus { outline: none; border-color: var(--gold); }
+    .promo-apply {
+      font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px; padding: 0 1.3rem; cursor: pointer; transition: all 0.18s;
+    }
+    .promo-apply:hover { background: var(--fire); border-color: var(--fire); }
+    .promo-msg { min-height: 1.3rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 0.75rem; }
+    .promo-msg.ok { color: #8bd48f; }
+    .promo-msg.err { color: #ff8f6b; }
+    .order-note { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 0.5rem; line-height: 1.6; }
+
+    /* ── ABOUT / founder + family ── */
+    .about-section { background: var(--panel); }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: center; margin-top: 2.5rem; }
+    @media(max-width:820px){ .about-grid{ grid-template-columns: 1fr; } }
+    .about-copy p { font-size: 0.98rem; line-height: 1.8; color: rgba(255,255,255,0.72); margin-bottom: 1rem; }
+    .about-media { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1.4fr 1fr; gap: 0.85rem; height: 460px; }
+    .about-media .imgslot { border-radius: 12px; }
+    .about-media .imgslot--tall { grid-row: span 2; }
+    @media(max-width:520px){ .about-media { height: 340px; } }
+
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .value-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-top: 3px solid var(--fire); padding: 1.75rem 1.5rem; transition: border-top-color 0.2s;
+    }
+    .value-card:hover { border-top-color: var(--gold); }
+    .value-card__icon { font-size: 1.9rem; margin-bottom: 0.85rem; }
+    .value-card h3 { font-family:'Oswald',sans-serif; font-size:1.05rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.55rem; color:var(--gold); }
+    .value-card p { font-size:0.9rem; line-height:1.7; color:rgba(255,255,255,0.65); }
+
+    /* ── FINAL CTA ── */
+    .cta-section { background: linear-gradient(135deg, #6a040f, #9d0208); text-align: center; }
+    .cta-section h2 { color: #fff; margin-bottom: 1rem; }
+    .cta-section p { font-size:1.05rem; color:rgba(255,255,255,0.82); line-height:1.75; max-width:540px; margin:0 auto 2rem; }
+    .cta-phone { font-family:'Oswald',sans-serif; font-size:1.6rem; font-weight:700; letter-spacing:0.04em; color:#fff; margin-top:1.25rem; display:block; }
+    .cta-phone a { color: var(--gold); }
 
     /* FOOTER */
-    footer {
-      background: #020408; padding: 3rem 2rem;
-      text-align: center; border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .footer-brand { font-family:'Oswald',sans-serif; font-size:1.6rem; font-weight:700; letter-spacing:0.06em; color:var(--gold); margin-bottom:0.5rem; }
+    footer { background: #020408; padding: 3rem 2rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-brand { font-family:'Great Vibes',cursive; font-size:2.2rem; color:var(--gold); margin-bottom:0.15rem; }
+    .footer-aka { font-family:'Oswald',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:1rem; }
+    .footer-contact { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.25rem; }
+    .footer-contact a { font-size:0.95rem; color:rgba(255,255,255,0.8); transition:color 0.15s; }
+    .footer-contact a:hover { color: var(--gold); }
     footer p { font-size:0.85rem; color:rgba(255,255,255,0.35); line-height:1.8; }
     footer small { font-size:0.72rem; color:rgba(255,255,255,0.2); display:block; margin-top:0.75rem; }
   </style>
@@ -178,122 +280,313 @@
 <body>
 
 <nav>
-  <span class="nav-brand">Dad's Spicy Chicken</span>
+  <a href="#top" class="nav-brand">African Cuisine<small>aka Dad's Spicy Chicken</small></a>
   <div class="nav-links">
-    <a href="#about">About</a>
     <a href="#menu">Menu</a>
     <a href="#order">Order</a>
+    <a href="#about">Our Story</a>
   </div>
-  <a href="#order" class="nav-order">Order Now</a>
+  <a href="tel:+13605220289" class="nav-order">📞 Call to Order</a>
 </nav>
 
-<section class="hero">
-  <div class="hero__bg"></div>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero__slides" id="heroSlides">
+    <div class="hero__slide is-active" style="background-image:url('assets/images/hero/hero.jpg'), linear-gradient(135deg,#03071e,#370617 40%,#6a040f 70%,#9d0208);"></div>
+    <div class="hero__slide" style="background-image:url('assets/images/menu/spicy-chicken.jpg'), linear-gradient(135deg,#370617,#9d0208);"></div>
+    <div class="hero__slide" style="background-image:url('assets/images/menu/jollof.jpg'), linear-gradient(135deg,#6a040f,#dc2f02);"></div>
+  </div>
+  <div class="hero__scrim"></div>
+  <div class="hero__glow"></div>
   <div class="hero__content">
     <span class="hero__tag">Authentic West African Cuisine · Family Owned</span>
-    <h1>Dad's<span>Spicy Chicken</span></h1>
-    <p class="hero__sub">Bold Flavors · West African Tradition · Open to All</p>
-    <p class="hero__desc">Every dish tells a story from home. Cooked fresh, seasoned deep, and served with the warmth only a family kitchen knows.</p>
+    <h1 class="hero__title">
+      <span class="hero__title-script">African Cuisine</span>
+      <span class="hero__title-aka">aka Dad's Spicy Chicken</span>
+    </h1>
+    <p class="hero__sub">Bold Flavors · West African Tradition · Cooked Fresh Daily</p>
+    <p class="hero__desc">Every dish tells a story from home. Slow-marinated, deeply seasoned, and served with the warmth only a family kitchen knows.</p>
     <div class="hero__cta-group">
-      <a href="#menu" class="btn-primary">Explore the Menu</a>
+      <a href="#menu" class="btn-primary">🍽️ See the Menu</a>
       <a href="#order" class="btn-outline">Order Now</a>
     </div>
-    <span class="hero__license">✅ Dept. of Revenue Licensed · Est. 02/17/2026</span>
   </div>
 </section>
 
-<div class="stats-bar">
-  <div class="stat-item"><span class="stat-item__num">100%</span><span class="stat-item__label">Family Operated</span></div>
-  <div class="stat-item"><span class="stat-item__num">🎟️</span><span class="stat-item__label">Vouchers Accepted</span></div>
-  <div class="stat-item"><span class="stat-item__num">Pike Place</span><span class="stat-item__label">Coming Soon</span></div>
-  <div class="stat-item"><span class="stat-item__num">Halal</span><span class="stat-item__label">Friendly Options</span></div>
-</div>
-
-<section class="about-section" id="about">
-  <div class="container">
-    <span class="eyebrow">Our Story</span>
-    <h2>Where Africa Meets Your Table</h2>
-    <p class="lead">Born from a father's passion, brought to life by the whole family. Co-owned and operated — every plate we serve carries the spice, the tradition, and the love of West African home cooking.</p>
-    <div class="about-grid">
-      <div class="about-card">
-        <div class="about-card__icon">👨‍🍳</div>
-        <h3>Family Recipe</h3>
-        <p>Generations of West African cooking wisdom — passed down, refined, and made fresh every day. The kind of food that makes you feel at home even if you've never been to Nigeria.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card__icon">🌍</div>
-        <h3>Welcoming to Everyone</h3>
-        <p>No labels, no barriers. Open to all people, all backgrounds, all appetites. We believe good food brings people together — and African cuisine does it better than most.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card__icon">📍</div>
-        <h3>Coming to Pike Place</h3>
-        <p>City of Seattle permit progress already achieved. Everett's best African food is headed downtown — watch this space for our Pike Place Market debut.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card__icon">🎟️</div>
-        <h3>Community First</h3>
-        <p>We accept community vouchers and partner with local outreach programs. Everyone deserves a nourishing, delicious meal — that's not just a slogan here.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- MENU FIRST -->
 <section class="menu-section" id="menu">
   <div class="container">
-    <span class="eyebrow">What We Serve</span>
-    <h2>Signature Menu</h2>
-    <p class="lead">A curated selection of West African classics. Ask us what's fresh today.</p>
-    <div class="menu-grid">
-      <div class="menu-card">
-        <span class="menu-card__emoji">🌶️</span>
-        <p class="menu-card__name">Dad's Signature Spicy Chicken <span class="menu-card__badge">Signature</span></p>
-        <p>The dish that started it all. Slow-marinated in bold West African spice, grilled over open flame. The flavor that keeps people coming back.</p>
+    <div class="menu-head reveal">
+      <div>
+        <span class="eyebrow">Order in a Tap</span>
+        <h2>The Menu</h2>
+        <p class="lead">Tap a dish to add it to your order, then call in your pickup. Everything is cooked fresh — ask us what's hot today.</p>
       </div>
-      <div class="menu-card">
-        <span class="menu-card__emoji">🍚</span>
-        <p class="menu-card__name">Jollof Rice & Stew <span class="menu-card__badge">Fan Fav</span></p>
-        <p>Smoky, rich, tomato-based rice — the national pride of West Africa. Served with your choice of protein.</p>
+    </div>
+
+    <div class="menu-filters reveal" id="menuFilters">
+      <button class="menu-filter is-active" data-filter="all">All</button>
+      <button class="menu-filter" data-filter="starter">Starters</button>
+      <button class="menu-filter" data-filter="main">Mains</button>
+      <button class="menu-filter" data-filter="dessert">Sweets</button>
+      <button class="menu-filter" data-filter="veg">Vegetarian</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- MAINS -->
+      <article class="dish reveal" data-cat="main spicy">
+        <div class="dish__media imgslot" data-emoji="🌶️"><img src="assets/images/menu/spicy-chicken.jpg" alt="Dad's Signature Spicy Chicken" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Dad's Signature Spicy Chicken</span></div>
+          <p class="dish__desc">The dish that started it all. Slow-marinated in bold West African spice, grilled over open flame. The flavor that keeps people coming back.</p>
+          <div class="dish__tags"><span class="tag tag--signature">Signature</span><span class="tag tag--spicy">Spicy</span></div>
+          <button class="dish__add" data-name="Signature Spicy Chicken">+ Add to order</button>
+        </div>
+      </article>
+
+      <article class="dish reveal" data-cat="main fav">
+        <div class="dish__media imgslot" data-emoji="🍚"><img src="assets/images/menu/jollof.jpg" alt="Jollof Rice & Stew" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Jollof Rice &amp; Stew</span></div>
+          <p class="dish__desc">Smoky, rich, tomato-based rice — the pride of West Africa. Served with your choice of protein.</p>
+          <div class="dish__tags"><span class="tag tag--fav">Fan Favorite</span><span class="tag tag--diet">Add protein</span></div>
+          <button class="dish__add" data-name="Jollof Rice & Stew">+ Add to order</button>
+        </div>
+      </article>
+
+      <article class="dish reveal" data-cat="main">
+        <div class="dish__media imgslot" data-emoji="🍲"><img src="assets/images/menu/egusi.jpg" alt="Egusi served with swallow or rice" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Egusi</span></div>
+          <p class="dish__desc">Ground melon seeds, fresh greens, and seasoned proteins in rich palm oil — a cornerstone of Nigerian home cooking. <strong>Served with swallow or rice.</strong></p>
+          <div class="dish__tags"><span class="tag tag--diet">Comes with swallow or rice</span></div>
+          <button class="dish__add" data-name="Egusi (with swallow or rice)">+ Add to order</button>
+        </div>
+      </article>
+
+      <!-- STARTERS -->
+      <article class="dish reveal" data-cat="starter spicy">
+        <div class="dish__media imgslot" data-emoji="🍢"><img src="assets/images/menu/suya.jpg" alt="Suya — spiced skewers" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Suya</span></div>
+          <p class="dish__desc">Skewered, thinly-sliced meat crusted in a bold peanut-spice blend and flame-grilled. The perfect way to start.</p>
+          <div class="dish__tags"><span class="tag tag--fav">Starter</span><span class="tag tag--spicy">Spicy</span><span class="tag tag--diet">Contains peanuts</span></div>
+          <button class="dish__add" data-name="Suya">+ Add to order</button>
+        </div>
+      </article>
+
+      <article class="dish reveal" data-cat="starter">
+        <div class="dish__media imgslot" data-emoji="🥘"><img src="assets/images/menu/pepper-soup.jpg" alt="Nigerian Pepper Soup" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Pepper Soup</span></div>
+          <p class="dish__desc">Rich, aromatic broth with goat or chicken. Warming, healing, deeply traditional — the bowl that reminds you what food is for.</p>
+          <div class="dish__tags"><span class="tag tag--fav">Starter</span><span class="tag tag--spicy">Spicy</span></div>
+          <button class="dish__add" data-name="Pepper Soup">+ Add to order</button>
+        </div>
+      </article>
+
+      <!-- SWEETS -->
+      <article class="dish reveal" data-cat="dessert veg">
+        <div class="dish__media imgslot" data-emoji="🫓"><img src="assets/images/menu/puff-puff.jpg" alt="Puff Puff" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Puff Puff</span></div>
+          <p class="dish__desc">Sweet fried dough bites — light, golden, and impossible to stop at one. A West African classic for snacking and celebrating.</p>
+          <div class="dish__tags"><span class="tag tag--veg">Vegetarian</span><span class="tag tag--diet">Contains gluten</span></div>
+          <button class="dish__add" data-name="Puff Puff">+ Add to order</button>
+        </div>
+      </article>
+
+      <article class="dish reveal" data-cat="dessert veg">
+        <div class="dish__media imgslot" data-emoji="🍪"><img src="assets/images/menu/chin-chin.jpg" alt="Chin Chin" loading="lazy" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Chin Chin</span></div>
+          <p class="dish__desc">Crunchy, lightly sweet fried dough squares — the snack everyone reaches for. Great for sharing (if you're willing to).</p>
+          <div class="dish__tags"><span class="tag tag--veg">Vegetarian</span><span class="tag tag--diet">Contains gluten</span></div>
+          <button class="dish__add" data-name="Chin Chin">+ Add to order</button>
+        </div>
+      </article>
+
+      <!-- CATERING -->
+      <article class="dish reveal" data-cat="main">
+        <div class="dish__media imgslot" data-emoji="📋" style="background:linear-gradient(135deg,#e85d04,#dc2f02);"><img src="" alt="" onerror="this.remove()"></div>
+        <div class="dish__body">
+          <div class="dish__row"><span class="dish__name">Catering</span></div>
+          <p class="dish__desc">Group orders, events, and outreach programs. Ask about community pricing and packages for gatherings of any size.</p>
+          <div class="dish__tags"><span class="tag tag--fav">Any size</span></div>
+          <button class="dish__add" data-name="Catering inquiry">+ Add to order</button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="dietary-note reveal">
+      <strong>Dietary &amp; allergies:</strong> We're happy to accommodate. Vegetarian options are labeled above, and several dishes can be made milder on request. Some dishes contain <strong>peanuts</strong>, <strong>gluten</strong>, or are prepared in a shared kitchen — please tell us about any allergies or dietary restrictions when you order and we'll guide you to the best choice.
+    </div>
+  </div>
+</section>
+
+<!-- ORDER / promo checkout -->
+<section class="order-section" id="order">
+  <div class="container">
+    <span class="eyebrow reveal">Quick &amp; Easy</span>
+    <h2 class="reveal">Order for Pickup</h2>
+    <p class="lead reveal" style="margin:0 auto;">Add dishes above, enter any promo code, then call to place your pickup order. Easy as it gets.</p>
+    <div class="order-card reveal">
+      <div class="order-cart">
+        <span>Items in your order</span>
+        <span id="cartCount">0</span>
       </div>
-      <div class="menu-card">
-        <span class="menu-card__emoji">🥘</span>
-        <p class="menu-card__name">Nigerian Pepper Soup</p>
-        <p>Rich, aromatic broth with goat or chicken. Warming, healing, deeply traditional. The bowl that reminds you what food is for.</p>
+      <div class="promo-row">
+        <input type="text" id="promoInput" placeholder="Promo code" autocomplete="off" spellcheck="false">
+        <button class="promo-apply" id="promoApply">Apply</button>
       </div>
-      <div class="menu-card">
-        <span class="menu-card__emoji">🍲</span>
-        <p class="menu-card__name">Egusi Soup</p>
-        <p>Ground melon seeds, fresh greens, and seasoned proteins in rich palm oil. A cornerstone of Nigerian home cooking.</p>
+      <p class="promo-msg" id="promoMsg" role="status" aria-live="polite"></p>
+      <a href="tel:+13605220289" class="btn-primary" style="width:100%; justify-content:center;">📞 Call to Order · (360) 522-0289</a>
+      <p class="order-note">Community meals available — ask about our outreach pricing when you call. Pickup only for now. <strong style="color:var(--gold);">Coming to Pike Place soon.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / founder + family -->
+<section class="about-section" id="about">
+  <div class="container">
+    <span class="eyebrow reveal">Our Story</span>
+    <h2 class="reveal">A Father's Recipe, the Family's Passion</h2>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>African Cuisine — better known as <strong>Dad's Spicy Chicken</strong> — was born from a father's love of cooking and brought to life by the whole family. Every plate carries generations of West African wisdom: recipes passed down, refined, and made fresh every single day.</p>
+        <p>For our family, food is how we say <em>welcome</em>. It's the spice that fills the kitchen, the pot that never empties, and the reason neighbors keep coming back. We pour that same passion into every order — the kind of food that makes you feel at home, even if you've never been to Nigeria.</p>
+        <p>From our family's table to yours: come hungry, leave full, and taste what we love.</p>
       </div>
-      <div class="menu-card">
-        <span class="menu-card__emoji">🫓</span>
-        <p class="menu-card__name">Puff Puff & Chin Chin <span class="menu-card__badge">Dessert</span></p>
-        <p>Sweet fried dough bites — the West African classic for snacking and celebrating. Light, golden, impossible to stop at one.</p>
+      <div class="about-media reveal">
+        <div class="imgslot imgslot--tall" data-emoji="👨‍🍳"><img src="assets/images/family/founder.jpg" alt="Founder — Dad" loading="lazy" onerror="this.remove()"></div>
+        <div class="imgslot" data-emoji="🍲"><img src="assets/images/family/family-1.jpg" alt="Family cooking together" loading="lazy" onerror="this.remove()"></div>
+        <div class="imgslot" data-emoji="🔥"><img src="assets/images/family/family-2.jpg" alt="In the kitchen" loading="lazy" onerror="this.remove()"></div>
       </div>
-      <div class="menu-card" style="background:rgba(232,93,4,0.06);">
-        <span class="menu-card__emoji">📋</span>
-        <p class="menu-card__name">Catering Available</p>
-        <p>Group orders, events, outreach programs. Ask about our community pricing and catering packages for any size gathering.</p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-card__icon">👨‍🍳</div>
+        <h3>Family Recipe</h3>
+        <p>Generations of West African cooking, passed down and made fresh daily.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-card__icon">🔥</div>
+        <h3>Cooked to Order</h3>
+        <p>Bold, deep flavor — slow-marinated and flame-grilled, never rushed.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-card__icon">📍</div>
+        <h3>Coming to Pike Place</h3>
+        <p>Seattle permit progress underway. Everett's best African food is headed downtown.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-card__icon">🤝</div>
+        <h3>Community First</h3>
+        <p>We partner with local outreach programs — everyone deserves a good, nourishing meal.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta-section" id="order">
+<!-- FINAL CTA -->
+<section class="cta-section">
   <div class="container">
-    <span class="eyebrow">Come Taste</span>
-    <h2>Africa Is Waiting for You</h2>
-    <p>First-time visitors always welcomed with warmth. Community vouchers accepted. Catering available for groups of any size.</p>
-    <a href="tel:+1" class="btn-primary">📞 Call to Order</a>
+    <span class="eyebrow reveal">Come Taste</span>
+    <h2 class="reveal">Africa Is Waiting for You</h2>
+    <p class="reveal">First-time visitors always welcomed with warmth. Catering available for groups of any size. One bite and you'll understand why people keep coming back.</p>
+    <a href="tel:+13605220289" class="btn-primary reveal">📞 Call to Order</a>
+    <span class="cta-phone reveal"><a href="tel:+13605220289">(360) 522-0289</a></span>
   </div>
 </section>
 
 <footer>
-  <p class="footer-brand">Dad's Spicy Chicken</p>
-  <p>Authentic West African Cuisine · Family Owned · Sole Proprietorship</p>
-  <p>Dept. of Revenue Licensed · Est. 02/17/2026 · Everett, WA</p>
-  <small>Logo: African pot on a stick fryer — designed with love by the family · Placeholder until official logo provided</small>
+  <p class="footer-brand">African Cuisine</p>
+  <p class="footer-aka">aka Dad's Spicy Chicken</p>
+  <div class="footer-contact">
+    <a href="tel:+13605220289">📞 (360) 522-0289</a>
+    <a href="mailto:abiodunfaleke1962@gmail.com">✉️ abiodunfaleke1962@gmail.com</a>
+  </div>
+  <p>Authentic West African Cuisine · Family Owned · Everett, WA</p>
+  <p>Coming to Pike Place soon</p>
+  <small>Site by the family. Photos coming soon.</small>
 </footer>
+
+<script>
+  // ── Hero background slideshow ──
+  (function () {
+    var slides = document.querySelectorAll('#heroSlides .hero__slide');
+    if (slides.length < 2) return;
+    var i = 0;
+    setInterval(function () {
+      slides[i].classList.remove('is-active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('is-active');
+    }, 5000);
+  })();
+
+  // ── Scroll-reveal ──
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('is-visible'); }); return; }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(function (e) { obs.observe(e); });
+  })();
+
+  // ── Menu category filter ──
+  (function () {
+    var filters = document.getElementById('menuFilters');
+    var dishes = document.querySelectorAll('#menuGrid .dish');
+    if (!filters) return;
+    filters.addEventListener('click', function (e) {
+      var btn = e.target.closest('.menu-filter');
+      if (!btn) return;
+      filters.querySelectorAll('.menu-filter').forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+      var f = btn.dataset.filter;
+      dishes.forEach(function (d) {
+        var show = f === 'all' || (d.dataset.cat || '').split(' ').indexOf(f) !== -1;
+        d.style.display = show ? '' : 'none';
+      });
+    });
+  })();
+
+  // ── "Add to order" cart counter (Uber-Eats-style feel) ──
+  (function () {
+    var count = 0;
+    var countEl = document.getElementById('cartCount');
+    document.querySelectorAll('.dish__add').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        count++;
+        if (countEl) countEl.textContent = count;
+        btn.classList.add('is-added');
+        btn.textContent = '✓ Added';
+        setTimeout(function () { btn.classList.remove('is-added'); btn.textContent = '+ Add to order'; }, 1400);
+      });
+    });
+  })();
+
+  // ── Promo code (demo validation) ──
+  (function () {
+    var input = document.getElementById('promoInput');
+    var apply = document.getElementById('promoApply');
+    var msg = document.getElementById('promoMsg');
+    if (!apply) return;
+    // Simple front-end promo codes. Real discounts are applied when you call to order.
+    var CODES = { 'WELCOME10': '10% off your first order', 'FAMILY': 'Free puff puff with any main', 'PIKEPLACE': 'Grand-opening special — ask when you call' };
+    function check() {
+      var code = (input.value || '').trim().toUpperCase();
+      if (!code) { msg.textContent = ''; msg.className = 'promo-msg'; return; }
+      if (CODES[code]) { msg.textContent = '✓ ' + code + ' — ' + CODES[code] + '. Mention it when you call!'; msg.className = 'promo-msg ok'; }
+      else { msg.textContent = 'That code isn\'t valid. Try WELCOME10.'; msg.className = 'promo-msg err'; }
+    }
+    apply.addEventListener('click', check);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+  })();
+</script>
 
 </body>
 </html>
