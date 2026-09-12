@@ -104,10 +104,16 @@
     /* Hero photo cluster (overlapping rounded cards) */
     .hero-photos { position: relative; height: 460px; }
     @media(max-width:860px){ .hero-photos{ height: 380px; } }
-    .hero-photos .imgslot { position: absolute; border-radius: 20px; box-shadow: 0 24px 50px rgba(43,29,22,0.18); border: 5px solid #fff; }
-    .hp-main { width: 62%; height: 78%; top: 0; right: 0; }
-    .hp-2 { width: 46%; height: 46%; bottom: 0; left: 0; z-index: 2; }
-    .hp-3 { width: 40%; height: 40%; bottom: 6%; left: 40%; z-index: 3; }
+    .hero-photos .imgslot { position: absolute; border-radius: 20px; box-shadow: 0 24px 50px rgba(43,29,22,0.18); border: 5px solid #fff; transition: transform 0.4s ease; }
+    .hp-main { width: 62%; height: 78%; top: 0; right: 0; transform: rotate(1.5deg); }
+    .hp-2 { width: 46%; height: 46%; bottom: 0; left: 0; z-index: 2; transform: rotate(-3deg); }
+    .hp-3 { width: 40%; height: 40%; bottom: 6%; left: 40%; z-index: 3; transform: rotate(4deg); }
+    .hero-photos:hover .hp-main { transform: rotate(0deg) scale(1.02); }
+    .hero-photos:hover .hp-2 { transform: rotate(-1deg); }
+    .hero-photos:hover .hp-3 { transform: rotate(2deg); }
+    /* Slideshow crossfade for hero + craving images */
+    .imgslot img.slide-swap { animation: slideFade 0.6s ease; }
+    @keyframes slideFade { from { opacity: 0.15; } to { opacity: 1; } }
     .hero-badge {
       position: absolute; bottom: 12%; right: -4%; z-index: 4;
       background: #fff; border-radius: 999px; padding: 0.6rem 1.1rem;
@@ -375,7 +381,7 @@
         </div>
       </article>
 
-      <article class="dish reveal" data-cat="dessert veg" data-name="Puff Puff">
+      <article class="dish reveal" data-cat="starter dessert veg" data-name="Puff Puff">
         <div class="dish__media imgslot" data-emoji="🫓"><img src="assets/images/menu/puff-puff.jpg" alt="Puff Puff" loading="lazy" onerror="this.remove()"></div>
         <div class="dish__body">
           <span class="dish__name">Puff Puff</span>
@@ -385,7 +391,7 @@
         </div>
       </article>
 
-      <article class="dish reveal" data-cat="dessert veg" data-name="Chin Chin">
+      <article class="dish reveal" data-cat="starter dessert veg" data-name="Chin Chin">
         <div class="dish__media imgslot" data-emoji="🍪"><img src="assets/images/menu/chin-chin.jpg" alt="Chin Chin" loading="lazy" onerror="this.remove()"></div>
         <div class="dish__body">
           <span class="dish__name">Chin Chin</span>
@@ -465,8 +471,8 @@
 <section class="cta">
   <div class="container">
     <p class="kicker" style="color:var(--gold);">Come taste</p>
-    <h2>Africa is <em>waiting</em> for you</h2>
-    <p>First-time visitors always welcomed with warmth. Catering available for groups of any size. One bite and you'll understand why people keep coming back.</p>
+    <h2>Ready to <em>taste</em> it?</h2>
+    <p>Bold, fresh West African cooking — one bite and you'll understand why people keep coming back. Call in your pickup order today. Catering available for groups of any size.</p>
     <a href="tel:+13605220289" class="btn-call">📞 Call to Order</a>
     <span class="cta-phone"><a href="tel:+13605220289">(360) 522-0289</a></span>
   </div>
@@ -495,6 +501,36 @@
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); } });
     }, { threshold: 0.12 });
     els.forEach(function (e){ obs.observe(e); });
+  })();
+
+  // Hero photo slideshow — cycle the cluster through the full dish set
+  (function () {
+    var pool = [
+      'assets/images/menu/spicy-chicken.jpg',
+      'assets/images/menu/jollof.jpg',
+      'assets/images/menu/egusi.jpg',
+      'assets/images/menu/suya.jpg',
+      'assets/images/menu/pepper-soup.jpg',
+      'assets/images/menu/puff-puff.jpg',
+      'assets/images/menu/chin-chin.jpg'
+    ];
+    var slots = Array.prototype.slice.call(document.querySelectorAll('.hero-photos .imgslot img'));
+    if (!slots.length) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i = 0;
+    setInterval(function () {
+      slots.forEach(function (img, n) {
+        var next = pool[(i + n) % pool.length];
+        if (img.getAttribute('src') === next) return;
+        var probe = new Image();
+        probe.onload = function () {
+          img.src = next;
+          img.classList.remove('slide-swap'); void img.offsetWidth; img.classList.add('slide-swap');
+        };
+        probe.src = next;
+      });
+      i = (i + 1) % pool.length;
+    }, 3800);
   })();
 
   // Menu filter
